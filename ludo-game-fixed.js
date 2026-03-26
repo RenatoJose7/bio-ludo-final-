@@ -430,4 +430,18 @@ class GameController {
 document.addEventListener('DOMContentLoaded', () => {
   window.game = new GameController();
   document.body.addEventListener('click', () => { if (window.soundGen && window.soundGen.init) window.soundGen.init(); }, { once: true });
+  
+  // Adicionar evento aos botões de seleção de jogadores
+  document.querySelectorAll('.btn-count').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.querySelectorAll('.btn-count').forEach(b => {
+        b.classList.remove('active', 'bg-ludoBlue', 'text-white', 'border-ludoBlue');
+        b.classList.add('border-slate-200');
+      });
+      this.classList.add('active', 'bg-ludoBlue', 'text-white', 'border-ludoBlue');
+      this.classList.remove('border-slate-200');
+    });
+  });
 });
