@@ -5,10 +5,20 @@
 
 class SoundGenerator {
   constructor() {
-    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    this.audioContext = null;
+  }
+
+  init() {
+    if (this.audioContext) return;
+    try {
+      this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+      console.warn('Web Audio API não disponível neste navegador');
+    }
   }
 
   playDiceRoll() {
+    if (!this.audioContext) return;
     const now = this.audioContext.currentTime;
     const osc = this.audioContext.createOscillator();
     const gain = this.audioContext.createGain();
@@ -28,6 +38,7 @@ class SoundGenerator {
   }
 
   playCorrect() {
+    if (!this.audioContext) return;
     const now = this.audioContext.currentTime;
     const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
 
@@ -50,6 +61,7 @@ class SoundGenerator {
   }
 
   playWrong() {
+    if (!this.audioContext) return;
     const now = this.audioContext.currentTime;
     const osc = this.audioContext.createOscillator();
     const gain = this.audioContext.createGain();
@@ -69,6 +81,7 @@ class SoundGenerator {
   }
 
   playMove() {
+    if (!this.audioContext) return;
     const now = this.audioContext.currentTime;
     const osc = this.audioContext.createOscillator();
     const gain = this.audioContext.createGain();
@@ -88,4 +101,13 @@ class SoundGenerator {
   }
 }
 
+// Inicializar singleton
 const soundGen = new SoundGenerator();
+
+// Gating de interação do usuário para inicializar o AudioContext
+document.addEventListener('click', () => {
+  soundGen.init();
+  if (soundGen.audioContext && soundGen.audioContext.state === 'suspended') {
+    soundGen.audioContext.resume();
+  }
+}, { once: true });

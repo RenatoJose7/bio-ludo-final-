@@ -23,30 +23,9 @@
         </div>
       </div>
 
-      <div id="player-names-section"></div>
-
       <div class="button-group">
         <button id="btn-start-game" class="btn-primary">Iniciar Jogo</button>
-        <button id="btn-show-rules" class="btn-secondary">Regras</button>
       </div>
-    </div>
-  </div>
-
-  <!-- TELA DE REGRAS -->
-  <div id="screen-rules" class="screen">
-    <div class="rules-container">
-      <h2>Regras do Ludo</h2>
-      <ol class="rules-list">
-        <li>Cada jogador tem <strong>4 peões</strong> da mesma cor na base inicial.</li>
-        <li>Para sair da base, o jogador precisa tirar <strong>6</strong> no dado.</li>
-        <li>Cada turno, lance o dado e mova um peão o número de casas correspondente.</li>
-        <li>Se cair em uma casa ocupada por outro jogador, o peão adversário volta para a base.</li>
-        <li>Algumas casas são <strong>seguras</strong> (marcadas com ★) e não permitem captura.</li>
-        <li>Tirar <strong>6</strong> dá direito a uma <strong>jogada extra</strong>.</li>
-        <li>O objetivo é levar os <strong>4 peões</strong> até a casa central do seu caminho.</li>
-        <li>O primeiro jogador a completar os 4 peões vence!</li>
-      </ol>
-      <button id="btn-back-rules" class="btn-secondary">Voltar</button>
     </div>
   </div>
 
@@ -62,8 +41,7 @@
 
       <!-- Centro: Tabuleiro -->
       <div class="game-center">
-        <div class="board-wrapper" style="background-image: url('tabuleiro.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
-          <canvas id="board-canvas" style="opacity: 0;"></canvas>
+        <div class="board-wrapper" style="background-image: url('tabuleiro.png');">
           <div id="pawns-container"></div>
         </div>
       </div>
@@ -75,12 +53,13 @@
         <div class="current-player-info">
           <div class="info-label">Sua Vez</div>
           <div class="player-name" id="current-player-name">Jogador 1</div>
-          <div class="player-score" id="current-player-score">0 pts</div>
         </div>
 
         <!-- Dado -->
         <div class="dice-section">
-          <div class="dice" id="dice-display">—</div>
+          <div class="dice" id="dice-display">
+            <!-- O dado 3D será injetado aqui via JS -->
+          </div>
           <button id="btn-roll-dice" class="btn-primary">Rolar Dado</button>
         </div>
 
@@ -93,8 +72,7 @@
         <!-- Log de Ações -->
         <div class="action-log" id="action-log">Bem-vindo ao BioLudo!</div>
 
-        <!-- Botão Menu -->
-        <button id="btn-menu" class="btn-secondary btn-small">Menu</button>
+        <button onclick="location.reload()" class="btn-secondary">Menu</button>
       </div>
     </div>
   </div>
@@ -117,18 +95,15 @@
       <!-- Verdadeiro/Falso -->
       <div id="q-truefalse" class="question-section hidden">
         <div class="tf-buttons">
-          <button class="btn-tf btn-true" data-answer="true">Verdadeiro</button>
-          <button class="btn-tf btn-false" data-answer="false">Falso</button>
+          <button class="btn-tf" data-answer="true">Verdadeiro</button>
+          <button class="btn-tf" data-answer="false">Falso</button>
         </div>
       </div>
 
       <!-- Ordenar Sequência -->
       <div id="q-order" class="question-section hidden">
-        <p class="order-hint">Arraste os itens para ordenar:</p>
-        <div class="order-container">
-          <div id="q-order-items" class="order-items"></div>
-          <div id="q-order-slots" class="order-slots"></div>
-        </div>
+        <p class="order-hint">Clique nos itens para ordenar (Simulação):</p>
+        <div id="q-order-items" class="order-items"></div>
         <button id="btn-confirm-order" class="btn-primary">Confirmar Ordem</button>
       </div>
 
@@ -138,31 +113,8 @@
     </div>
   </div>
 
-  <!-- POP-UP DE FEEDBACK -->
-  <div id="feedback-popup" class="popup hidden">
-    <div class="popup-content">
-      <div class="popup-icon" id="popup-icon"></div>
-      <div class="popup-title" id="popup-title"></div>
-      <div class="popup-message" id="popup-message"></div>
-      <button id="btn-popup-close" class="btn-primary">Continuar</button>
-    </div>
-  </div>
-
-  <!-- MODAL DE VITÓRIA -->
-  <div id="victory-modal" class="modal hidden">
-    <div class="modal-overlay"></div>
-    <div class="modal-content victory-content">
-      <h2 class="victory-title">Vitória!</h2>
-      <div class="victory-player" id="victory-player-name"></div>
-      <div class="victory-score" id="victory-score"></div>
-      <div class="victory-ranking" id="victory-ranking"></div>
-      <button id="btn-play-again" class="btn-primary">Jogar Novamente</button>
-      <button id="btn-victory-menu" class="btn-secondary">Menu</button>
-    </div>
-  </div>
-
   <script src="sounds.js"></script>
   <script src="questions.js"></script>
-  <script src="ludo-game-v2.js"></script>
+  <script src="ludo-game-fixed.js"></script>
 </body>
 </html>
