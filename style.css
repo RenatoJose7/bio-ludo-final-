@@ -1,275 +1,178 @@
-/* ═══════════════════════════════════════════════════════════════
-   BioLudo — CSS (Tabuleiro + Painel Jogadores + Ordenação)
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   BIOLUDO - ESTILOS GLOBAIS E RESPONSIVIDADE
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Inter:wght@400;500;600;800&display=swap');
 
 :root {
-  --color-red: #E63946;
-  --color-blue: #457B9D;
-  --color-green: #2A9D8F;
-  --color-yellow: #F4A261;
-  --color-bg: #f5f7fa;
-  --color-white: #ffffff;
-  --color-dark: #2c3e50;
-  --color-light: #95a5a6;
-  --color-border: #ecf0f1;
-  --shadow: 0 4px 12px rgba(0,0,0,0.15);
+  --ludo-red: #E63946;
+  --ludo-blue: #457B9D;
+  --ludo-green: #2A9D8F;
+  --ludo-yellow: #F4A261;
+  --ludo-dark: #1D3557;
+  --ludo-light: #F1FAEE;
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
+body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: var(--color-dark);
-  overflow: hidden;
+  background-color: #f1f5f9;
+  color: #1e293b;
+  overflow-x: hidden;
+  height: 100vh;
+  width: 100vw;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   SCREENS
-   ══════════════════════════════════════════════════════════════ */
-
-.screen {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  z-index: 10;
-}
-
-.screen.active {
-  display: flex;
-}
-
-/* ══════════════════════════════════════════════════════════════
-   TELA INICIAL
-   ══════════════════════════════════════════════════════════════ */
-
-#screen-intro {
-  flex-direction: column;
-  padding: 20px;
-}
-
-.intro-container {
-  background: var(--color-white);
-  border-radius: 20px;
-  padding: 40px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.game-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 3rem;
-  font-weight: 700;
-  text-align: center;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.game-subtitle {
-  text-align: center;
-  color: var(--color-light);
-  font-size: 1rem;
-}
-
-.setup-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.setup-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--color-dark);
-}
-
-.player-count-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-count {
-  flex: 1;
-  padding: 12px;
-  border: 2px solid var(--color-border);
-  background: var(--color-bg);
-  border-radius: 10px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
-  color: var(--color-dark);
-}
-
-.btn-count:hover {
-  border-color: var(--color-dark);
-  background: var(--color-white);
-}
-
-.btn-count.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border-color: transparent;
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.btn-primary {
-  padding: 14px 28px;
-  border: none;
-  border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.btn-secondary {
-  padding: 12px 24px;
-  border: 2px solid var(--color-border);
-  background: var(--color-white);
-  border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  color: var(--color-dark);
-}
-
-/* ══════════════════════════════════════════════════════════════
-   TELA DO JOGO
-   ══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAYOUT PRINCIPAL (RESPONSIVO)
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 #screen-game {
-  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  padding: 1rem;
+  gap: 1rem;
+  background-color: #f1f5f9;
 }
 
-.game-layout {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: center;
+/* Ajuste para Tablets e Celulares */
+@media (max-width: 1024px) {
+  #screen-game {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .players-panel {
+    order: 2;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 120px;
+    flex-direction: row !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .players-list {
+    flex-direction: row !important;
+    width: 100%;
+  }
+
+  .players-list > div {
+    min-width: 180px;
+    flex: 0 0 auto;
+  }
+
+  .game-center {
+    order: 1;
+    width: 100%;
+    flex: none !important;
+    padding: 0.5rem 0;
+  }
+
+  .control-panel {
+    order: 3;
+    width: 100% !important;
+    height: auto !important;
+    flex: none !important;
+  }
+
+  .board-wrapper {
+    width: 95vw !important;
+    height: 95vw !important;
+    max-width: 500px !important;
+    max-height: 500px !important;
+  }
 }
 
-.players-panel, .control-panel {
-  width: 180px;
-  height: 85vh;
-  background: var(--color-white);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-y: auto;
-}
-
-.game-center {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABULEIRO (GRID DINÂMICO)
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 .board-wrapper {
   position: relative;
-  width: min(85vh, 85vw);
-  height: min(85vh, 85vw);
-  background: var(--color-white);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  background-size: contain;
-  background-repeat: no-repeat;
+  aspect-ratio: 1 / 1;
+  width: min(82vh, 82vw);
+  height: min(82vh, 82vw);
+  background-color: white;
+  border: 8px solid white;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.board-bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('tabuleiro.png');
+  background-size: 100% 100%;
   background-position: center;
+  z-index: 0;
 }
 
 #pawns-container {
   position: absolute;
   inset: 0;
+  z-index: 20;
   pointer-events: none;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   PEÕES (ESTILIZAÇÃO)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .pawn {
   position: absolute;
-  width: 28px;
-  height: 28px;
+  width: 6.5%; /* Baseado no grid 15x15 */
+  height: 6.5%;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 32px;
+  max-height: 32px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  pointer-events: auto;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
-  z-index: 5;
+  pointer-events: auto;
+  z-index: 30;
+  transform: translate(-50%, -50%); /* Garante alinhamento central constante */
 }
 
 .pawn:hover {
-  transform: scale(1.2) translate(-50%, -50%) !important;
-  z-index: 10;
+  transform: translate(-50%, -60%) scale(1.2) !important;
+  z-index: 100;
+  filter: brightness(1.1);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   DADO 3D
-   ══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   DADO 3D (ANIMAÇÃO)
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 .dice-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.dice {
-  width: 60px;
-  height: 60px;
-  perspective: 600px;
+  perspective: 1000px;
 }
 
 .dice-cube {
-  width: 100%;
-  height: 100%;
+  width: 60px;
+  height: 60px;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .face {
@@ -277,14 +180,15 @@ html, body {
   width: 60px;
   height: 60px;
   background: white;
-  border: 2px solid #ddd;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  font-weight: bold;
-  border-radius: 10px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #1e293b;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
 }
 
 .front  { transform: rotateY(0deg) translateZ(30px); }
@@ -294,114 +198,63 @@ html, body {
 .top    { transform: rotateX(90deg) translateZ(30px); }
 .bottom { transform: rotateX(-90deg) translateZ(30px); }
 
-.dice-cube.rolling {
-  animation: diceRoll3D 0.8s linear infinite;
+.rolling {
+  animation: dice-roll 0.8s infinite linear;
 }
 
-@keyframes diceRoll3D {
-  0% { transform: rotateX(0) rotateY(0) rotateZ(0); }
+@keyframes dice-roll {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
   100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   MODAL DE PERGUNTAS
-   ══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAIS E UTILITÁRIOS
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
+.custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
+.btn-option {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  background-color: #f8fafc;
+  border: 2px solid #f1f5f9;
+  border-radius: 1rem;
+  font-weight: 700;
+  color: #475569;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
-  justify-content: center;
+}
+
+.order-item {
+  padding: 0.75rem;
+  background-color: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 0.5rem;
+  cursor: default;
 }
 
 .modal-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
 }
 
-.modal-content {
-  position: relative;
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.question-header {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  color: #667eea;
-}
-
-.btn-option, .btn-tf {
-  width: 100%;
-  padding: 12px;
-  margin: 5px 0;
-  border: 2px solid #eee;
-  border-radius: 10px;
-  background: #f9f9f9;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-option:hover, .btn-tf:hover {
-  background: #eee;
-  border-color: #667eea;
-}
-
-.question-feedback {
-  padding: 15px;
-  border-radius: 10px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.question-feedback.correct { background: #d4edda; color: #155724; }
-.question-feedback.wrong { background: #f8d7da; color: #721c24; }
-
-.hidden { display: none !important; }
-
-/* ══════════════════════════════════════════════════════════════
-   PAINEL DE JOGADORES
-   ══════════════════════════════════════════════════════════════ */
-
-.player-card {
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid #eee;
-  margin-bottom: 10px;
-}
-
-.player-card.active-turn {
-  border-color: #667eea;
-  background: rgba(102, 126, 234, 0.1);
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
-}
-
-.color-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.action-log {
-  flex: 1;
-  background: #f9f9f9;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 0.85rem;
-  overflow-y: auto;
-  max-height: 150px;
+/* Esconder elementos desnecessários no mobile */
+@media (max-width: 640px) {
+  .players-panel h3, .players-panel i {
+    display: none;
+  }
+  
+  .current-player-card {
+    padding: 0.75rem !important;
+  }
+  
+  .player-name {
+    font-size: 1.25rem !important;
+  }
 }

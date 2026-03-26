@@ -4,114 +4,200 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BioLudo — Jogo de Tabuleiro Educacional</title>
+  <!-- Bibliotecas Externas para UI Moderna -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ludoRed: '#E63946',
+            ludoBlue: '#457B9D',
+            ludoGreen: '#2A9D8F',
+            ludoYellow: '#F4A261',
+            ludoDark: '#1D3557',
+            ludoLight: '#F1FAEE',
+          },
+          boxShadow: {
+            'neon': '0 0 15px rgba(69, 123, 157, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
+<body class="bg-ludoDark text-slate-800 h-screen overflow-hidden font-sans">
 
   <!-- TELA INICIAL -->
-  <div id="screen-intro" class="screen active">
-    <div class="intro-container">
-      <h1 class="game-title">BioLudo</h1>
-      <p class="game-subtitle">Jogo de Tabuleiro Educacional</p>
+  <div id="screen-intro" class="screen active fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-ludoDark to-blue-900 p-4">
+    <div class="intro-container bg-white rounded-3xl p-10 max-w-md w-full shadow-2xl animate__animated animate__zoomIn">
+      <div class="text-center mb-8">
+        <h1 class="text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-ludoRed to-ludoYellow mb-2">BioLudo</h1>
+        <p class="text-slate-500 font-medium">A Biologia nunca foi tão divertida!</p>
+      </div>
       
-      <div class="setup-section">
-        <label class="setup-label">Número de Jogadores:</label>
-        <div class="player-count-buttons">
-          <button class="btn-count active" data-count="2">2</button>
-          <button class="btn-count" data-count="3">3</button>
-          <button class="btn-count" data-count="4">4</button>
+      <div class="setup-section mb-8">
+        <label class="block text-sm font-bold uppercase tracking-widest text-slate-400 mb-4 text-center">Quantos cientistas vão jogar?</label>
+        <div class="player-count-buttons flex gap-3">
+          <button class="btn-count active flex-1 py-4 rounded-2xl border-2 border-slate-100 font-bold text-xl transition-all hover:bg-slate-50 active:scale-95" data-count="2">2</button>
+          <button class="btn-count flex-1 py-4 rounded-2xl border-2 border-slate-100 font-bold text-xl transition-all hover:bg-slate-50 active:scale-95" data-count="3">3</button>
+          <button class="btn-count flex-1 py-4 rounded-2xl border-2 border-slate-100 font-bold text-xl transition-all hover:bg-slate-50 active:scale-95" data-count="4">4</button>
         </div>
       </div>
 
-      <div class="button-group">
-        <button id="btn-start-game" class="btn-primary">Iniciar Jogo</button>
+      <div class="button-group flex flex-col gap-3">
+        <button id="btn-start-game" class="btn-primary w-full py-5 rounded-2xl bg-gradient-to-r from-ludoBlue to-ludoDark text-white font-bold text-lg shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl active:translate-y-0">
+          <i class="fas fa-play mr-2"></i> Iniciar Expedição
+        </button>
       </div>
     </div>
   </div>
 
   <!-- TELA DO JOGO -->
-  <div id="screen-game" class="screen">
-    <div class="game-layout">
+  <div id="screen-game" class="screen hidden fixed inset-0 flex items-stretch p-4 gap-4 bg-slate-100">
+    
+    <!-- Painel Esquerdo: Jogadores -->
+    <div class="players-panel w-64 bg-white rounded-3xl shadow-xl p-6 flex flex-col gap-4 overflow-hidden">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-black text-slate-400 uppercase tracking-widest text-xs">Exploradores</h3>
+        <i class="fas fa-users text-slate-300"></i>
+      </div>
+      <div id="players-list" class="players-list flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar">
+        <!-- Jogadores injetados via JS -->
+      </div>
+    </div>
+
+    <!-- Centro: Tabuleiro -->
+    <div class="game-center flex-1 flex items-center justify-center relative">
+      <div class="board-wrapper relative shadow-2xl rounded-2xl border-8 border-white bg-white overflow-hidden">
+        <div class="board-bg-image absolute inset-0 opacity-100 z-0"></div>
+        <div id="pawns-container" class="absolute inset-0 z-20 pointer-events-none"></div>
+      </div>
+    </div>
+
+    <!-- Painel Direito: Controles -->
+    <div class="control-panel w-72 bg-white rounded-3xl shadow-xl p-6 flex flex-col gap-6 overflow-hidden">
       
-      <!-- Painel Esquerdo: Jogadores -->
-      <div class="players-panel">
-        <h3 class="panel-title">Jogadores</h3>
-        <div id="players-list" class="players-list"></div>
+      <!-- Card Jogador Atual -->
+      <div class="current-player-card p-5 rounded-2xl bg-slate-50 border-2 border-slate-100 text-center transition-all animate__animated animate__fadeIn">
+        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Turno Atual</div>
+        <div class="player-name text-2xl font-black truncate" id="current-player-name">Jogador 1</div>
       </div>
 
-      <!-- Centro: Tabuleiro -->
-      <div class="game-center">
-        <div class="board-wrapper" style="background-image: url('tabuleiro.png');">
-          <div id="pawns-container"></div>
+      <!-- Seção do Dado -->
+      <div class="dice-section flex flex-col items-center gap-6 py-4 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+        <div class="dice h-20 w-20" id="dice-display">
+          <!-- Dado 3D injetado aqui -->
+        </div>
+        <button id="btn-roll-dice" class="group relative px-8 py-4 bg-ludoBlue text-white font-black rounded-2xl shadow-lg shadow-blue-200 transition-all hover:bg-ludoDark hover:-translate-y-1 active:translate-y-0 active:shadow-md">
+          <span class="relative z-10"><i class="fas fa-dice mr-2 group-hover:rotate-180 transition-transform duration-500"></i> Rolar Dado</span>
+        </button>
+      </div>
+
+      <!-- Seleção de Peão (Melhorada) -->
+      <div id="pawn-selection" class="pawn-selection hidden animate__animated animate__bounceIn">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="flex-1 h-px bg-slate-100"></span>
+          <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Escolha o Peão</p>
+          <span class="flex-1 h-px bg-slate-100"></span>
+        </div>
+        <div id="pawn-buttons-container" class="grid grid-cols-2 gap-2">
+          <!-- Botões injetados via JS -->
         </div>
       </div>
 
-      <!-- Painel Direito: Controles -->
-      <div class="control-panel">
+      <!-- Log de Ações -->
+      <div class="flex-1 flex flex-col min-h-0">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400">Relatório de Campo</h3>
+          <i class="fas fa-scroll text-slate-300 text-xs"></i>
+        </div>
+        <div class="action-log flex-1 bg-slate-50 rounded-2xl p-4 text-xs font-medium leading-relaxed text-slate-600 overflow-y-auto border border-slate-100 custom-scrollbar" id="action-log">
+          Sistemas prontos. Aguardando início...
+        </div>
+      </div>
+
+      <!-- Menu Inferior -->
+      <div class="flex gap-2">
+        <button onclick="location.reload()" class="flex-1 py-3 bg-white border-2 border-slate-100 text-slate-400 font-bold text-xs rounded-xl transition-all hover:bg-slate-50 hover:text-slate-600">
+          <i class="fas fa-home mr-1"></i> Menu
+        </button>
+        <button id="btn-rules" class="p-3 bg-white border-2 border-slate-100 text-slate-400 rounded-xl transition-all hover:bg-slate-50 hover:text-slate-600">
+          <i class="fas fa-question-circle"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE PERGUNTA (UI REFEITA) -->
+  <div id="question-modal" class="modal hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="modal-overlay absolute inset-0 bg-ludoDark/80 backdrop-blur-sm"></div>
+    <div class="modal-content relative bg-white rounded-[2.5rem] shadow-2xl max-w-xl w-full overflow-hidden animate__animated animate__backInUp">
+      
+      <div class="bg-slate-50 px-8 py-6 border-b border-slate-100 flex justify-between items-center">
+        <div>
+          <span id="q-level" class="px-3 py-1 bg-ludoBlue/10 text-ludoBlue text-[10px] font-black uppercase tracking-widest rounded-full mr-2">Nível 1</span>
+          <span id="q-type" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Múltipla Escolha</span>
+        </div>
+        <div class="h-10 w-10 rounded-full bg-white shadow-sm flex items-center justify-center text-ludoBlue">
+          <i class="fas fa-microscope"></i>
+        </div>
+      </div>
+
+      <div class="p-10">
+        <h2 id="q-text" class="text-2xl font-black text-ludoDark leading-tight mb-8">Pergunta de Biologia?</h2>
         
-        <!-- Informações do Jogador Atual -->
-        <div class="current-player-info">
-          <div class="info-label">Sua Vez</div>
-          <div class="player-name" id="current-player-name">Jogador 1</div>
+        <!-- Seções de Resposta -->
+        <div id="q-multiple" class="question-section hidden grid grid-cols-1 gap-3">
+          <div id="q-options" class="contents"></div>
         </div>
 
-        <!-- Dado -->
-        <div class="dice-section">
-          <div class="dice" id="dice-display">
-            <!-- O dado 3D será injetado aqui via JS -->
-          </div>
-          <button id="btn-roll-dice" class="btn-primary">Rolar Dado</button>
+        <div id="q-truefalse" class="question-section hidden flex gap-4">
+          <button class="btn-tf flex-1 py-6 bg-green-50 border-2 border-green-100 text-green-600 font-black rounded-2xl transition-all hover:bg-green-100 active:scale-95" data-answer="true">
+            <i class="fas fa-check-circle mb-2 text-2xl block"></i> Verdadeiro
+          </button>
+          <button class="btn-tf flex-1 py-6 bg-red-50 border-2 border-red-100 text-red-600 font-black rounded-2xl transition-all hover:bg-red-100 active:scale-95" data-answer="false">
+            <i class="fas fa-times-circle mb-2 text-2xl block"></i> Falso
+          </button>
         </div>
 
-        <!-- Seleção de Peão -->
-        <div id="pawn-selection" class="pawn-selection hidden">
-          <p>Escolha um peão:</p>
-          <div id="pawn-buttons-container"></div>
+        <div id="q-order" class="question-section hidden">
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Organize a sequência correta:</p>
+          <div id="q-order-items" class="flex flex-col gap-2 mb-6"></div>
+          <button id="btn-confirm-order" class="w-full py-4 bg-ludoDark text-white font-black rounded-2xl shadow-lg transition-all hover:bg-black active:scale-95">
+            Confirmar Sequência
+          </button>
         </div>
 
-        <!-- Log de Ações -->
-        <div class="action-log" id="action-log">Bem-vindo ao BioLudo!</div>
-
-        <button onclick="location.reload()" class="btn-secondary">Menu</button>
+        <!-- Feedback Dinâmico -->
+        <div id="q-feedback" class="question-feedback hidden mt-6 p-6 rounded-2xl text-center animate__animated animate__fadeIn">
+          <!-- Texto de feedback -->
+        </div>
+        
+        <button id="btn-continue-game" class="hidden w-full mt-6 py-5 bg-gradient-to-r from-ludoBlue to-ludoDark text-white font-black rounded-2xl shadow-xl transition-all hover:shadow-2xl hover:-translate-y-1 active:translate-y-0">
+          Continuar Jornada <i class="fas fa-arrow-right ml-2"></i>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL DE PERGUNTA -->
-  <div id="question-modal" class="modal hidden">
-    <div class="modal-overlay"></div>
-    <div class="modal-content">
-      <div class="question-header">
-        <span class="question-level" id="q-level">Nível 1</span>
-        <span class="question-type" id="q-type">Múltipla Escolha</span>
-      </div>
-      <div class="question-text" id="q-text"></div>
-      
-      <!-- Múltipla Escolha -->
-      <div id="q-multiple" class="question-section hidden">
-        <div id="q-options"></div>
-      </div>
-
-      <!-- Verdadeiro/Falso -->
-      <div id="q-truefalse" class="question-section hidden">
-        <div class="tf-buttons">
-          <button class="btn-tf" data-answer="true">Verdadeiro</button>
-          <button class="btn-tf" data-answer="false">Falso</button>
-        </div>
-      </div>
-
-      <!-- Ordenar Sequência -->
-      <div id="q-order" class="question-section hidden">
-        <p class="order-hint">Clique nos itens para ordenar (Simulação):</p>
-        <div id="q-order-items" class="order-items"></div>
-        <button id="btn-confirm-order" class="btn-primary">Confirmar Ordem</button>
-      </div>
-
-      <!-- Feedback -->
-      <div id="q-feedback" class="question-feedback hidden"></div>
-      <button id="btn-continue-game" class="btn-primary hidden">Continuar</button>
-    </div>
-  </div>
+  <style>
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    
+    .btn-option {
+      @apply w-full p-5 text-left bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-slate-600 transition-all hover:bg-white hover:border-ludoBlue hover:text-ludoBlue hover:shadow-md active:scale-[0.98];
+    }
+    
+    .order-item {
+      @apply p-4 bg-white border-2 border-slate-100 rounded-xl font-bold text-slate-600 shadow-sm cursor-move transition-all hover:border-ludoBlue hover:shadow-md;
+    }
+  </style>
 
   <script src="sounds.js"></script>
   <script src="questions.js"></script>
